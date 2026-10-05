@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>福井市 浸水防除施設設置費補助金 補助対象区域検索</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--fg:#1a1d21;--sub:#5a6270;--line:#d5d9e0;--ok:#0b6b35;--okbg:#e3f4ea;--pt:#8a5a00;--ptbg:#fff1d6;--bad:#a61b1b;--badbg:#fde8e8;--ac:#1f4e8c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171b;--card:#1d2127;--fg:#eef0f3;--sub:#9aa3b0;--line:#363c45;--ok:#6fd89a;--okbg:#14301f;--pt:#f2c46b;--ptbg:#3a2c0d;--bad:#ff9a9a;--badbg:#3b1717;--ac:#7fb0ee}}
+:root[data-theme="dark"]{--bg:#14171b;--card:#1d2127;--fg:#eef0f3;--sub:#9aa3b0;--line:#363c45;--ok:#6fd89a;--okbg:#14301f;--pt:#f2c46b;--ptbg:#3a2c0d;--bad:#ff9a9a;--badbg:#3b1717;--ac:#7fb0ee}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;font-size:18px;line-height:1.6}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{margin:0 0 16px;font-size:20px;line-height:1.4}
+h1 span{display:block;font-size:26px;font-weight:700}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input{flex:1 1 100%;font-size:20px;padding:14px;border:2px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg)}
+input:focus{outline:none;border-color:var(--ac)}
+button{flex:1;font-size:18px;padding:12px;border-radius:8px;border:2px solid var(--ac);background:var(--ac);color:#fff;font-weight:700}
+button.sub{background:var(--card);color:var(--ac)}
+#out{margin-top:16px}
+.panel{border-radius:10px;padding:16px;margin-bottom:12px;border:2px solid}
+.ok{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.pt{background:var(--ptbg);border-color:var(--pt);color:var(--pt)}
+.bad{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.big{font-size:26px;font-weight:700;line-height:1.35}
+.area{font-size:20px;font-weight:700;margin-top:6px}
+.note{font-size:15px;margin-top:6px}
+table{width:100%;border-collapse:collapse;margin-top:12px;background:var(--card);color:var(--fg);border-radius:6px}
+th,td{text-align:left;padding:8px 10px;border:1px solid var(--line);font-size:17px;vertical-align:top}
+th{width:42%;font-weight:600;color:var(--sub)}
+h2{font-size:20px;margin:8px 0}
+.card{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.card b{font-size:20px}
+.chip{white-space:nowrap;font-size:15px;font-weight:700;padding:4px 10px;border-radius:99px}
+.chip.ok{border:0}.chip.pt{border:0}
+.foot{font-size:14px;color:var(--sub);margin-top:16px}
+.ref{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:16px;color:var(--fg)}
+details{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+summary{font-weight:700;cursor:pointer}
+.g{margin-top:10px;font-size:16px}.g b{display:inline-block;width:1.6em;color:var(--ac)}
+</style>
+</head>
+<body>
+<main>
+<h1>福井市 浸水防除施設設置費補助金<span>補助対象区域検索</span></h1>
+<div class="row">
+<input id="q" type="search" autocomplete="off" placeholder="町名を入力してください（例：明里町、足羽3丁目、和田1丁目）">
+<button id="go">検索</button><button id="rs" class="sub">リセット</button>
+</div>
+<div id="out"></div>
+<p class="foot">※この検索結果は、添付された補助対象区域一覧表（福井市浸水防除施設設置費補助金 補助対象区域一覧表（参考））をもとにしています。対象区域については、最終的に福井市の最新情報をご確認ください。</p>
+<details><summary>一覧表の全掲載内容を見る（69件）</summary><div id="all"></div></details>
+</main>
+<script>
+// PDF記載のとおり（五十音順・（一部）の有無を保持）
+const R=[
+["あ","明里町"],["あ","足羽１～５丁目"],["あ","幾久町",1],["あ","大手１～３丁目"],["あ","大宮１～５丁目"],["あ","大宮６丁目",1],
+["か","開発１丁目",1],["か","学園１～３丁目"],["か","花月１～５丁目"],["か","春日１～２丁目"],["か","春日３丁目",1],["か","春日町"],["か","勝見１～３丁目"],["か","加茂河原１～２丁目"],["か","加茂河原３丁目",1],["か","加茂河原４丁目",1],["か","木田１丁目",1],["か","木田町",1],["か","毛矢１～３丁目"],["か","乾徳１～４丁目"],["か","光陽１～４丁目"],
+["さ","左内町"],["さ","志比口１～３丁目"],["さ","順化１～２丁目"],["さ","城東１～４丁目"],["さ","菅谷１～２丁目"],["さ","成和１丁目",1],
+["た","大願寺１～３丁目"],["た","田原１～２丁目"],["た","中央１～３丁目"],["た","月見１丁目",1],["た","月見２丁目",1],["た","月見３～５丁目"],["た","つくも１～２丁目"],["た","手寄１～２丁目"],["た","照手１～４丁目"],["た","照手町"],["た","豊岡１～２丁目"],["た","豊島１～２丁目"],
+["な","長本町"],["な","西方１～２丁目"],["な","西木田１～５丁目"],["な","日光１～２丁目"],["な","二の宮１丁目",1],["な","二の宮２丁目",1],["な","二の宮３丁目",1],["な","二の宮４丁目",1],["な","二の宮５丁目",1],
+["は","春山１～２丁目"],["は","日之出１～５丁目"],["は","文京１～５丁目"],["は","文京６丁目",1],["は","宝永１～４丁目"],
+["ま","町屋１～３丁目"],["ま","松城町"],["ま","松本１～４丁目"],["ま","松本上町"],["ま","南四ツ居１丁目",1],["ま","南四ツ居２丁目"],["ま","みのり１～４丁目"],["ま","御幸１～４丁目"],["ま","桃園１～２丁目"],
+["や","有楽町"],["や","四ツ井１～２丁目"],["や","米松１～２丁目"],
+["わ","和田１～２丁目"],["わ","和田３丁目",1],["わ","和田中１丁目",1],["わ","和田東１丁目",1]
+];
+const KM={一:1,二:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9};
+const kn=s=>{let n=0,t=0;for(const c of s){if(c==='十'){n+=(t||1)*10;t=0}else t=KM[c]||0}return n+t};
+const norm=s=>s.normalize('NFKC').replace(/\s/g,'').replace(/[〜∼˜]/g,'~')
+ .replace(/[‐‑‒–—―−ー]/g,'-').replace(/[ヶヵッ]/g,'つ')
+ .replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-96));
+const DATA=R.map(([kana,area,p])=>{
+ const e={kana,area,partial:!!p},k=norm(area),m=k.match(/^(.+?)(\d+)(?:~(\d+))?丁目$/);
+ e.key=k;e.base=m?m[1]:k;e.ranged=!!m;e.from=m?+m[2]:0;e.to=m?+(m[3]||m[2]):0;return e});
+const lab=e=>e.area+(e.partial?'（一部）':'');
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function search(raw){
+ let s=norm(raw).replace(/\(一部\)/g,'').replace(/^福井県/,'').replace(/^福井市/,'');
+ s=s.replace(/([一二三四五六七八九十]+)丁目/g,(_,k)=>kn(k)+'丁目');
+ if(!s)return{t:'empty'};
+ const m=s.match(/^(\D*?)(\d+)(.*)$/);
+ if(!m){const res=DATA.filter(e=>e.key.includes(s));
+  return{t:!res.length?'none':(res.length===1&&res[0].base===s&&!res[0].ranged?'exact':'list'),res,ref:[]}}
+ const name=m[1],num=+m[2],rest=m[3],rg=rest.match(/^~(\d+)/),to=rg?+rg[1]:num;
+ if(!name)return{t:'none',res:[],ref:[]};
+ const ex=DATA.filter(e=>e.base===name&&(e.ranged?(e.from<=num&&to<=e.to):!rg));
+ if(ex.length)return{t:'exact',res:ex};
+ const cd=DATA.filter(e=>e.base!==name&&e.base.includes(name)&&(e.ranged?(e.from<=num&&to<=e.to):(!/丁目/.test(rest)&&!rg)));
+ if(cd.length)return{t:'list',res:cd};
+ return{t:'none',res:[],ref:DATA.filter(e=>e.base===name||e.base===name+'町')};
+}
+
+function render(raw){
+ const o=document.getElementById('out'),r=search(raw);
+ if(r.t==='empty'){o.innerHTML='';return}
+ let h='';
+ if(r.t==='exact'){
+  r.res.forEach(e=>{
+   h+=`<div class="panel ${e.partial?'pt':'ok'}"><div class="big">${e.partial?'△ 一部が補助対象区域です':'✓ 補助対象区域です'}</div>
+   <div class="area">${e.partial?'「'+esc(lab(e))+'」が補助対象区域':'対象区域：'+esc(e.area)}</div>
+   ${e.partial?'<div class="note">※「一部」の対象範囲は一覧表に記載がありません（推測していません）。詳細は福井市へご確認ください。</div>':''}</div>
+   <table><tr><th>検索した町名</th><td>${esc(raw)}</td></tr><tr><th>補助対象区域かどうか</th><td>${e.partial?'一部が対象':'対象'}</td></tr><tr><th>PDF上の登録名称</th><td>${esc(lab(e))}</td></tr></table>`})
+ }else if(r.t==='list'){
+  h+=`<h2>検索結果：${r.res.length}件</h2>`+r.res.map(e=>`<div class="card"><b>${esc(lab(e))}</b><span class="chip ${e.partial?'pt':'ok'}">${e.partial?'一部が対象':'対象'}</span></div>`).join('');
+ }else{
+  h+=`<div class="panel bad"><div class="big">× 対象外（一覧に掲載なし）</div><div class="area" style="font-size:18px">該当する補助対象区域が見つかりませんでした。</div></div>
+  <table><tr><th>検索した町名</th><td>${esc(raw)}</td></tr><tr><th>補助対象区域かどうか</th><td>一覧表に掲載なし</td></tr></table>`;
+  if(r.ref&&r.ref.length)h+=`<h2>参考：一覧表の掲載</h2><div class="ref">${r.ref.map(e=>esc(lab(e))).join('<br>')}<br><span style="font-size:14px">※ご指定の番号は上記の範囲外です</span></div>`;
+ }
+ o.innerHTML=h;
+}
+const q=document.getElementById('q');
+q.addEventListener('input',()=>render(q.value));
+document.getElementById('go').onclick=()=>render(q.value);
+q.addEventListener('keydown',e=>{if(e.key==='Enter')render(q.value)});
+document.getElementById('rs').onclick=()=>{q.value='';render('');q.focus()};
+const g={};DATA.forEach(e=>(g[e.kana]=g[e.kana]||[]).push(lab(e)));
+document.getElementById('all').innerHTML=Object.keys(g).map(k=>`<div class="g"><b>${k}</b>${g[k].map(esc).join('、')}</div>`).join('');
+</script>
+</body>
+</html>
